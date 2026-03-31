@@ -1,7 +1,4 @@
 # H1D024085-PraktikumKB-Pertemuan3
-Berikut adalah draf `README.md` yang merangkum dan menjelaskan kode logika fuzzy Anda secara singkat, terstruktur, dan mudah dipahami. 
-
-***
 
 # Sistem Kontrol Logika Fuzzy: Prediksi Stok Makanan
 
@@ -54,3 +51,59 @@ Pada bagian akhir kode, sistem melakukan simulasi (testing) dengan nilai input s
 2. Program mencetak estimasi nilai angka (crisp value) untuk `stok_makanan` ke layar (console).
 3. `stok_makanan.view(sim=system)` akan memunculkan grafik visualisasi area (defuzzifikasi) yang menunjukkan di mana titik output berada.
 4. Program akan tertahan (tidak langsung menutup) berkat perintah `input('Tekan Enter untuk keluar...')` sehingga grafik bisa dilihat.
+
+
+
+# Sistem Kontrol Logika Fuzzy: Evaluasi Kepuasan Pelayanan
+
+## 📖 Deskripsi Singkat
+Program ini adalah implementasi **Logika Fuzzy (Fuzzy Logic)** menggunakan Python untuk mengevaluasi **Tingkat Kepuasan Pelayanan**. Sistem ini mengambil empat kriteria penilaian sebagai input (kejelasan informasi, kejelasan persyaratan, kemampuan petugas, dan ketersediaan sarana prasarana) untuk menghasilkan skor akhir kepuasan pelayanan. 
+
+Program ini dibangun dengan library `scikit-fuzzy` dan menggunakan kombinasi fungsi keanggotaan (membership function) berbentuk segitiga (*triangular*) dan trapesium (*trapezoidal*).
+
+## 🛠️ Prasyarat (Requirements)
+Pastikan Anda telah menginstal library yang dibutuhkan sebelum menjalankan skrip ini:
+
+```bash
+pip install numpy scikit-fuzzy
+```
+
+## 🧩 Penjelasan Variabel
+
+### Variabel Input (Antecedents)
+Sistem menerima 4 parameter input dengan rentang nilai **0 hingga 100**, yang semuanya menggunakan fungsi keanggotaan segitiga (`trimf`):
+1. **`kejelasan_informasi`**: *Tidak Memuaskan* (0-75), *Cukup Memuaskan* (60-90), *Memuaskan* (75-100)
+2. **`kejelasan_persyaratan`**: *Tidak Memuaskan* (0-75), *Cukup Memuaskan* (60-90), *Memuaskan* (75-100)
+3. **`kemampuan_petugas`**: *Tidak Memuaskan* (0-75), *Cukup Memuaskan* (60-90), *Memuaskan* (75-100)
+4. **`ketersediaan_sarpras`**: *Tidak Memuaskan* (0-75), *Cukup Memuaskan* (60-90), *Memuaskan* (75-100)
+
+### Variabel Output (Consequent)
+Sistem menghasilkan 1 variabel output dengan rentang nilai **0 hingga 400**, menggunakan kombinasi fungsi segitiga (`trimf`) dan trapesium (`trapmf`):
+* **`kepuasan_pelayanan`**: 
+  * *Tidak Memuaskan* (Segitiga: 0-75)
+  * *Kurang Memuaskan* (Trapesium: 50-150)
+  * *Cukup Memuaskan* (Trapesium: 100-275)
+  * *Memuaskan* (Trapesium: 250-350)
+  * *Sangat Memuaskan* (Segitiga: 325-400)
+
+## ⚖️ Aturan Fuzzy (Fuzzy Rules)
+Basis pengetahuan sistem ini dibangun atas **13 Aturan (Rules)** yang menghubungkan variabel input dengan output menggunakan operator logika `AND`. 
+
+Beberapa contoh aturan yang diterapkan:
+* **Aturan 1:** Jika semua aspek (informasi, persyaratan, petugas, sarpras) bernilai *tidak memuaskan*, maka kepuasan pelayanan *tidak memuaskan*.
+* **Aturan 13:** Jika semua aspek bernilai *memuaskan*, maka kepuasan pelayanan *sangat memuaskan*.
+
+*(Terdapat berbagai kombinasi skenario di antara Aturan 1 hingga 13 yang menentukan gradasi kepuasan dari kurang memuaskan hingga memuaskan).*
+
+## 🚀 Cara Kerja dan Simulasi (Testing)
+Pada akhir skrip, sistem diuji dengan memberikan nilai input spesifik untuk sebuah kasus:
+* `kejelasan_informasi` = 80
+* `kejelasan_persyaratan` = 60
+* `kemampuan_petugas` = 50
+* `ketersediaan_sarpras` = 90
+
+**Alur Eksekusi:**
+1. `system.compute()` melakukan proses inferensi fuzzy dan defuzzifikasi berdasarkan input yang diberikan.
+2. Hasil perhitungan (skor kepuasan layanan) dicetak ke layar.
+3. `kepuasan_pelayanan.view(sim=system)` menampilkan grafik area hasil evaluasi fuzzy.
+4. Perintah `input('Tekan Enter untuk keluar...')` menjaga agar jendela grafik tetap terbuka hingga pengguna menekan tombol Enter.
